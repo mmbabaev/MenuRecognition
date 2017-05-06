@@ -10,9 +10,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 def test():
-    img_rgb = cv2.imread('/Users/Babaev/Desktop/picture.png')
+    img_rgb = cv2.imread('resources/picture.png')
     img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-    template = cv2.imread('/Users/Babaev/Desktop/template.png', 0)
+    template = cv2.imread('resources/template.png', 0)
     w, h = template.shape[::-1]
 
     res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
