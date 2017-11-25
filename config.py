@@ -6,6 +6,8 @@ LOCALHOST = "localhost"
 PORT = 5000
 
 UPLOAD_FOLDER = './files'
+UPLOAD_FOLDER = '/home/mmbabaev/MenuRecognition/files'
+TESS_DATA_FOLDER = '/home/mmbabaev/MenuRecognition/tessdata'
 
 DATABASE_PATH = 'sqlite:///restaurantmenu1234.db'
 

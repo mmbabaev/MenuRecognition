@@ -17,7 +17,7 @@ from flask_sqlalchemy import *
 import config
 import database_setup
 from api_error import ApiError
-from config import LANGUAGES, DATABASE_PATH, UPLOAD_FOLDER
+from config import LANGUAGES, DATABASE_PATH, UPLOAD_FOLDER, TESS_DATA_FOLDER
 from database_setup import User, Restaurant, Category, MenuItem, OcrTemplate
 from helpers.social_helper import *
 from helpers.fir_helper import notify_user
@@ -340,7 +340,8 @@ def image_to_string(file):
     file.save(path)
 
     image = Image.open(path)
-    return pytesseract.image_to_string(image, "rus")
+    tessdata_dir_config = '--tessdata-dir "' + TESS_DATA_FOLDER +'"'
+    return pytesseract.image_to_string(image, "rus", config=tessdata_dir_config)
 
 """
     preprocess = "thresh"
@@ -367,7 +368,7 @@ def image_to_string(file):
     filename = "gray-" + filename + ".png".format(os.getpid())
     path = os.path.join(UPLOAD_FOLDER, filename)
     cv2.imwrite(path, gray)
-    
+
     image = Image.open(path)
     return pytesseract.image_to_string(image, "rus")
 """
