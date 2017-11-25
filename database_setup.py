@@ -138,7 +138,6 @@ class PropertyOcrTemplate(Base):
         self.width = d.get('width')
         self.height = d.get('height')
 
-
     @property
     def serialize(self):
         return {

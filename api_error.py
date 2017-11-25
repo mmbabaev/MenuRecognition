@@ -2,7 +2,7 @@ from flask import jsonify
 
 
 class ApiError(Exception):
-    status_code = 400
+    status_code = 500
     additional_dict = {}
 
     def __init__(self, message, status_code=None, payload=None):

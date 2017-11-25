@@ -170,19 +170,27 @@ def register():
 
 
 @app.route('/restaurant')
+@login_required
 def restaurants():
    # rests = session.query(Restaurant).order_by(desc(Restaurant.created_date))
     rests = Restaurant.user_restaurants(current_user.id)
     return jsonify([rest.serialize for rest in rests])
 
 
-@app.route('/restaurant/<int:restaurant_id>')
+@app.route('/restaurant/<int:restaurant_id>', methods=['GET', 'DELETE'])
+@login_required
 def restaurant(restaurant_id):
+
     rest = Restaurant.get_by_id(restaurant_id)
     if rest is None:
         raise ApiError("Restaurant is not exist")
 
-    return jsonify(rest.full_serialize)
+    if request.method == "GET":
+        return jsonify(rest.full_serialize)
+    else:
+        session.delete(rest)
+        session.commit()
+        return jsonify(success=True)
 
 
 @app.route('/restaurant/new', methods=['POST'])
@@ -239,6 +247,15 @@ def add_category(restaurant_id):
     return jsonify(category.serialize)
 
 
+@app.route('/category/<int:category_id>', methods=["DELETE"])
+@login_required
+def delete_category(category_id):
+    category = Category.get_by_id(category_id)
+    session.delete(category)
+    session.commit()
+    return jsonify(success=True)
+
+
 def add_template_dict_for_category(template_dict, category):
     name = template_dict.get('name')
     if name is None:
@@ -266,7 +283,7 @@ def update_item(item_id):
         raise ApiError("item is not exist")
 
     if request.method == 'DELETE':
-        item.delete()
+        session.delete(item)
         session.commit()
         return jsonify(success=True)
 
@@ -386,6 +403,7 @@ def image(filename):
     return send_from_directory(directory=uploads, filename=filename + ".png")
 
 
+
 @app.route('/restaurant/<int:rest_id>/available_users')
 @login_required
 def available_users(rest_id):
@@ -449,7 +467,6 @@ def send_jsons():
             json.dump(data, outfile)
         filenames.append(path)
 
-
     send_mail_files(filenames, send_to)
 
     return jsonify(success=True)
@@ -460,11 +477,32 @@ def get_locale():
     return request.accept_languages.best_match(LANGUAGES.keys())
 
 
+def raise_default_error(status_code):
+    raise ApiError("Произошла ошибка при выполнении запроса", status_code)
+
+"""
+@app.errorhandler(404)
+def handle_not_found():
+    raise_default_error(404)
+
+
+@app.errorhandler(500)
+def handle_server_error():
+    raise_default_error(500)
+
+
+@app.errorhandler(405)
+def handle_method_error():
+    raise_default_error(405)
+"""
+
 @app.errorhandler(ApiError)
 def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
+
+
 
 
 #config.HOST = config.LOCALHOST
