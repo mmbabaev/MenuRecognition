@@ -108,7 +108,7 @@ def login():
 
     flask.flash('Logged in successfully.')
 
-    registered_user.fir_token = json.get('firToken')
+    registered_user.fir_token = request.json.get('firToken')
 
     login_user(registered_user)
 
@@ -470,4 +470,5 @@ def handle_invalid_usage(error):
 #config.HOST = config.LOCALHOST
 host = config.HOST
 
-app.run(host, port=config.PORT)
+if __name__ == '__main__':
+    app.run(host, port=config.PORT)
