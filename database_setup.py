@@ -326,8 +326,8 @@ class MenuItem(Base):
 
 
 # Creating the database file
-engine = create_engine(DATABASE_PATH)
-Base.metadata.create_all(engine)
+#engine = create_engine(DATABASE_PATH)
+#Base.metadata.create_all(engine)
 
 
 def init_test_data():
