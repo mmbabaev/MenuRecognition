@@ -287,9 +287,8 @@ class MenuItem(Base):
     def parse_float(self, s):
         if s == 0:
             return 0
-
-        result = ''.join(i for i in s if i in "0123456789.")
         try:
+            result = ''.join(i for i in s if i in "0123456789.")
             return float(result)
         except:
             return 0
@@ -302,7 +301,7 @@ class MenuItem(Base):
         else:
             filename = filename.replace('.png', '')
 
-        return "http://" + config.HOST + ":" + str(config.PORT) + "/images/" + filename
+        return "http://" + config.IMAGE_HOST + "/images/" + filename
 
 
 
@@ -310,10 +309,10 @@ class MenuItem(Base):
     @property
     def serialize(self):
         return {
-            'name': self.name,
-            'description': self.description,
+            'name': self.name or "",
+            'description': self.description or "",
             'id': self.id,
-            'price': self.price,
+            'price': self.price or 0,
 
             'properties': self.prop_dict,
 
