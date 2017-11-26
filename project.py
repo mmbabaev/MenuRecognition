@@ -358,9 +358,9 @@ def image_to_string(file):
 
     image = Image.open(path)
 
-    #tessdata_dir_config = '--tessdata-dir "' + TESS_DATA_FOLDER + '"'
-    #return pytesseract.image_to_string(image, "rus", config=tessdata_dir_config)
-    return pytesseract.image_to_string(image, "rus")
+    tessdata_dir_config = '--tessdata-dir "' + TESS_DATA_FOLDER + '"'
+    return pytesseract.image_to_string(image, "rus", config=tessdata_dir_config)
+    #return pytesseract.image_to_string(image, "rus")
 
 
 """
@@ -478,7 +478,7 @@ def send_jsons():
 
 @babel.localeselector
 def get_locale():
-    return request.accept_languages.best_match(LANGUAGES.keys())
+    return request.accept_languages.best_match({"ru" : "rus"}.keys())
 
 
 def raise_default_error(status_code):
@@ -514,5 +514,7 @@ host = config.HOST
 
 if __name__ == '__main__':
     app.run(host, port=config.PORT)
-else:
-    config.setup_for_remote()
+
+
+
+
