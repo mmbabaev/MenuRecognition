@@ -5,15 +5,17 @@ HOST = "172.20.10.2"
 LOCALHOST = "localhost"
 PORT = 5000
 
-#IMAGE_HOST = HOST + ":" + str(PORT)
-#UPLOAD_FOLDER = './files'
-#TESS_DATA_FOLDER = './tessdata'
-#DATABASE_PATH = 'sqlite:///restaurantmenu123456.db'
+#HOST = LOCALHOST
 
-IMAGE_HOST = 'mmbabaev.pythonanywhere.com'
-UPLOAD_FOLDER = '/home/mmbabaev/MenuRecognition/files'
-TESS_DATA_FOLDER = '/home/mmbabaev/MenuRecognition/tessdata'
-DATABASE_PATH = 'sqlite:////home/mmbabaev/MenuRecognition/restaurantmenu123456.db'
+IMAGE_HOST = HOST + ":" + str(PORT)
+UPLOAD_FOLDER = './files'
+TESS_DATA_FOLDER = './tessdata'
+DATABASE_PATH = 'sqlite:///restaurantmenu.db'
+
+#IMAGE_HOST = 'mmbabaev.pythonanywhere.com'
+#UPLOAD_FOLDER = '/home/mmbabaev/MenuRecognition/files'
+#TESS_DATA_FOLDER = '/home/mmbabaev/MenuRecognition/tessdata'
+#DATABASE_PATH = 'sqlite:////home/mmbabaev/MenuRecognition/restaurantmenu123456.db'
 
 
 

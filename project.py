@@ -116,6 +116,7 @@ def login():
 
 
 @app.route('/logout', methods=['DELETE'])
+@login_required
 def logout():
     logout_user()
     return jsonify(success=True)
@@ -223,8 +224,8 @@ def add_category(restaurant_id):
     if restaurant is None:
         raise ApiError("Restaurant not exist")
 
-    if restaurant.user_id != current_user.id:
-        raise ApiError("you have not access to this restaurant")
+    #if restaurant.user_id != current_user.id:
+    #    raise ApiError("you have not access to this restaurant")
 
     category = Category()
     name = request.json.get('name')
@@ -239,7 +240,7 @@ def add_category(restaurant_id):
     session.add(category)
     session.commit()
 
-    template_dict  = request.json.get('template')
+    template_dict = request.json.get('template')
 
     if template_dict is not None:
         add_template_dict_for_category(template_dict, category)
@@ -332,7 +333,7 @@ def recognize_position(category_id):
         image_file = request.files[key]
 
         if key == 'image':
-            filename = generate_filename()
+            filename = generate_filename(prefix=key + str(category_id))
             path = os.path.join(UPLOAD_FOLDER, filename)
             image_file.save(path)
             print(filename)
@@ -399,6 +400,7 @@ def generate_filename(prefix=""):
     return prefix + str(current_user.id) + "-" + str(time.time()).replace(".", "") + ".png"
 
 #@app.route('/images/upload', methods=['POST'])
+
 
 @app.route('/images/<string:filename>')
 def image(filename):
@@ -509,11 +511,9 @@ def handle_invalid_usage(error):
 
 
 
-#config.HOST = config.LOCALHOST
-host = config.HOST
 
 if __name__ == '__main__':
-    app.run(host, port=config.PORT)
+    app.run(config.HOST, port=config.PORT)
 
 
 
