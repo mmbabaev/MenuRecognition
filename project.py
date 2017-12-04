@@ -100,10 +100,10 @@ def login():
     registered_user = session.query(User).filter(User.email == email).first()
 
     if registered_user is None:
-        raise ApiError(gettext("User not registered"))
+        raise ApiError(gettext("Пользователь с ввенными данными не зарегистрирован"))
 
     if registered_user.password != password:
-        raise ApiError(gettext("Invalid email and password combination"))
+        raise ApiError(gettext("Неправильная комбинация почты и пароля"))
 
 
     flask.flash('Logged in successfully.')
@@ -124,22 +124,22 @@ def logout():
 
 def check_login_args(email, password):
     if email is None or not email:
-        raise ApiError(gettext("Email is required"))
+        raise ApiError(gettext("Введите email."))
 
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-        raise ApiError(gettext("Invalid email"))
+        raise ApiError(gettext("Неправильный email."))
 
     if password is None or not password:
-        raise ApiError(gettext("Password is required"))
+        raise ApiError(gettext("Введите пароль."))
 
-    if password.lower() == password or password.upper() == password or not password.isalnum():
-        raise ApiError(gettext("Invalid password"))
+    if password.lower() == password or password.upper() == password or not password.isalnum() or len(password) < 6:
+        raise ApiError(gettext("Неправильный пароль. Пароль должен содержать минимум 6 символов, включая маленькую, большую букву и цифру."))
 
 
 def check_register_args(email, password, name):
     check_login_args(email, password)
     if name is None:
-        raise ApiError(gettext("Name is required"))
+        raise ApiError(gettext("Введите имя."))
 
 
 @app.route('/register', methods=['POST'])
@@ -204,6 +204,8 @@ def create_restaurant():
 
     rest.name = body['name']
     rest.user_id = current_user.id
+
+    created_rest =
 
     location = body.get('location')
     if location is not None:
@@ -356,6 +358,10 @@ def image_to_string(file):
     filename = generate_filename()
     path = os.path.join(UPLOAD_FOLDER, filename)
     file.save(path)
+
+    print("start image_to_string path:")
+    print(path)
+
 
     image = Image.open(path)
 
@@ -514,6 +520,10 @@ def handle_invalid_usage(error):
 
 if __name__ == '__main__':
     app.run(config.HOST, port=config.PORT)
+    print("don't setup for remote")
+else:
+    print("setup for remote")
+    #config.setup_for_remote()
 
 
 
