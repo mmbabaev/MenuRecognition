@@ -275,6 +275,9 @@ def add_template_dict_for_category(template_dict, category):
     session.commit()
 
     props = template_dict['properties']
+    if len(props) == 0:
+        raise ApiError("Необходимо добавить как минимум одно свойство.")
+
     template.add_properties(props)
     session.add(template)
     session.commit()
