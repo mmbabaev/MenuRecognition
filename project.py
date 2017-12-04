@@ -202,7 +202,7 @@ def create_restaurant():
 
     name = body['name']
     if name is None or name == "":
-
+        raise ApiError(u"Введите название ресторана.")
 
     rest = Restaurant()
 
@@ -238,8 +238,8 @@ def add_category(restaurant_id):
     category = Category()
     name = request.json.get('name')
 
-    if name is None:
-        raise ApiError("Name is required")
+    if not name:
+        raise ApiError(u"Введите имя")
 
     category.name = name
 
@@ -419,7 +419,6 @@ def image(filename):
     uploads = app.config['UPLOAD_FOLDER']
 
     return send_from_directory(directory=uploads, filename=filename + ".png")
-
 
 
 @app.route('/restaurant/<int:rest_id>/available_users')
