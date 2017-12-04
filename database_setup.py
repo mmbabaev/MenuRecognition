@@ -187,6 +187,10 @@ class Restaurant(Base):
         return result
 
     @staticmethod
+    def get_by_name(name):
+        return session.query(Restaurant).filter_by(name=name).first()
+
+    @staticmethod
     def get_by_id(id):
         return session.query(Restaurant).filter_by(id=id).first()
 

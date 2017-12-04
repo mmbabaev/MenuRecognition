@@ -63,7 +63,7 @@ def social_login():
             json = vk_info(social_id, token)
 
         if json is None:
-            raise ApiError("Произошла ошибка авторизации")
+            raise ApiError(u"Произошла ошибка авторизации")
 
         image_url = json.get('image_url')
         first_name = json.get("first_name")
@@ -100,10 +100,10 @@ def login():
     registered_user = session.query(User).filter(User.email == email).first()
 
     if registered_user is None:
-        raise ApiError(gettext("Пользователь с ввенными данными не зарегистрирован"))
+        raise ApiError(gettext(u"Пользователь с ввенными данными не зарегистрирован"))
 
     if registered_user.password != password:
-        raise ApiError(gettext("Неправильная комбинация почты и пароля"))
+        raise ApiError(gettext(u"Неправильная комбинация почты и пароля"))
 
 
     flask.flash('Logged in successfully.')
@@ -123,23 +123,23 @@ def logout():
 
 
 def check_login_args(email, password):
-    if email is None or not email:
-        raise ApiError(gettext("Введите email."))
+    if not email:
+        raise ApiError(gettext(u"Введите email."))
 
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-        raise ApiError(gettext("Неправильный email."))
+        raise ApiError(gettext(u"Неправильный email."))
 
-    if password is None or not password:
-        raise ApiError(gettext("Введите пароль."))
+    if not password:
+        raise ApiError(gettext(u"Введите пароль."))
 
     if password.lower() == password or password.upper() == password or not password.isalnum() or len(password) < 6:
-        raise ApiError(gettext("Неправильный пароль. Пароль должен содержать минимум 6 символов, включая маленькую, большую букву и цифру."))
+        raise ApiError(gettext(u"Неправильный пароль. Пароль должен содержать минимум 6 символов, включая маленькую, большую букву и цифру."))
 
 
 def check_register_args(email, password, name):
     check_login_args(email, password)
     if name is None:
-        raise ApiError(gettext("Введите имя."))
+        raise ApiError(gettext(u"Введите имя."))
 
 
 @app.route('/register', methods=['POST'])
@@ -200,12 +200,18 @@ def create_restaurant():
     # create new restaurant
     body = request.json
 
+    name = body['name']
+    if name is None or name == "":
+
+
     rest = Restaurant()
 
-    rest.name = body['name']
+    rest.name = name
     rest.user_id = current_user.id
 
-    created_rest =
+    created_rest = Restaurant.get_by_name(rest.name)
+    if created_rest is not None:
+        raise ApiError(u"Ресторан с данным именем уже существует.")
 
     location = body.get('location')
     if location is not None:
